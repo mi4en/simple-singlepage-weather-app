@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import { MessageService } from '../services/message.service';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+
+//const params = new HttpParams().set('city', l).set('sort', SortOn);
 
 @Injectable()
 export class WeatherService {
@@ -38,9 +40,10 @@ export class WeatherService {
     this.messageService.add(`WeatherService: ${message}`);
   }
 
-  getForecast(city) {
-    return this.http.get(this.API_URL + city).pipe(
-      tap(_ => this.log('fetched city')),
+  getForecast(city: string, days: string) {
+    let params = new HttpParams().set('city', city).set('days', days);
+    return this.http.get(this.API_URL + city + '&' + days, { params }).pipe(
+      tap(_ => this.log('fetched ' + city)),
       catchError(this.handleError('getForecast', []))
     );
   }

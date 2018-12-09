@@ -10,16 +10,24 @@ export class HomeComponent implements OnInit {
   location = {
     city: 'pernik'
   };
+  city = 'pernik';
+  days: '2';
 
   weather: any;
 
   constructor(private weatherService: WeatherService) {}
 
   ngOnInit() {
-    this.weatherService.getForecast(this.location.city).subscribe(response => {
-      console.log(response);
+    //this.getForecast();
+  }
 
-      this.weather = response;
-    });
+  getForecast() {
+    this.weatherService
+      .getForecast(this.city, this.days)
+      .subscribe(response => {
+        console.log(response);
+
+        this.weather = response;
+      });
   }
 }
